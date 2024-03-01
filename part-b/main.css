@@ -46,7 +46,7 @@ body {
 	border-radius: 0.5rem;
 
 	color: #FFF;
-	background-color: #bff162;
+	background-color: #3e2aee;
 
 	transition: 0.2s;
 	user-select: none;
@@ -59,3 +59,18 @@ body {
 .controls button:active {
 	background-color: #0d141d;
 }
+
+.date-picker {
+	margin-top: 1rem;
+ }
+ 
+ .date-picker label {
+	display: block;
+	margin-bottom: 0.5rem;
+ }
+ 
+ .date-picker input {
+	padding: 0.5rem;
+	border-radius: 0.5rem;
+ }
+ 
