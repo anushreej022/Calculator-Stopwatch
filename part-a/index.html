@@ -23,31 +23,29 @@
                             <div class="card-body">
                                 <form name="form" id="form">
                                     <div class="form-group">
-                                        <label for="emailid">Email Id : </label>
+                                        <label for="emailid">Email :</label>
                                         <input class="form-control" type="email" id="emailid"
-                                            placeholder="Enter your Email Id">
-                                        <span class="error-message" id="invalidemail">Email-id is invalid</span>
+                                            placeholder="Enter your Northeastern Email Id">
+                                        <span class="error" id="invalidemail">Not a Northeastern Email Id </span>
                                     </div>
                                     <div class="form-group mt-3 ">
-                                        <label for="username">Username</label>
+                                        <label for="username">User Name :</label>
                                         <input class="form-control" type="text" id="username"
-                                            placeholder="Enter your Username" name="username">
-                                        <span class="error-message">Please enter a valid username</span>
+                                            placeholder="Enter your User Name">
+                                        <span class="error" id="invalidusername">User Name length should be greater than 5</span>
                                     </div>
                                     <div class="form-group mt-3">
-                                        <label for="password">Password</label>
+                                        <label for="password">Password :</label>
                                         <input autocomplete="new-password" type="password" class="form-control"
                                             placeholder="Enter your Password" id="password">
-                                        <span class="error-message" id="invalidpassword">
-                                            Password must contain at least one uppercase, lowercase, digit and a special
-                                            character & (length > 8).
-                                        </span>
+                                        <span class="error" id="invalidpassword">Password must contain at least one uppercase, lowercase, digit and a special
+                                            character & (length > 8)</span>
                                     </div>
                                     <div class="form-group mt-3 ">
-                                        <label for="password">Confirm Password</label>
+                                        <label for="confirmPassword">Confirm Password :</label>
                                         <input autocomplete="new-password" type="password" class="form-control"
                                             placeholder="Confirm Password" id="confirmPassword">
-                                        <span class="error-message" id="invalidconfirmPassword">Passwords do not match</span>
+                                        <span class="error" id="invalidconfirmPassword">Passwords do not match</span>
                                     </div>
                                     <input type="submit" id="submit" class="btn btn-dark btn-block px-3 mt-3"
                                         value="Login" disabled />
@@ -66,72 +64,103 @@
 
     <script>
         $(document).ready(function () {
+            $("form").submit(e => false);
+            $('.error').hide();
+            $("#submit").prop("disabled", true);
 
-            $("form").submit(e => false)
-
-            $('.error-message').hide();
-            $("#submit").click(function () {
-
-                var mail = $("#emailid").val();
-                var uname = $("#username").val();
-                var pass = $("#password").val();
-
-                if (mail.length < 1) {
-                    $("#emailid").next().show();
-                }
-                if (uname.length < 1) {
-                    $("#username").next().show();
-                }
-                if (IsEmail(mail) == false) {
-                    $('#invalidemail').show();
-                }
-                if (pass.length < 1) {
-                    $("#password").next().show();
-                }
-                if (IsPassword(pass) == false) {
-                    $('#invalidpassword').show();
-                } else {
-                    document.location.href = './calculator.html?userName=' + uname;
-                    alert("Logged In successfully");
-                    return true;
-                }
-            })
-
-            $("#confirmPassword").next().hide();
-
-            $("#confirmPassword").change(function () {
-                var confirmPassword = $("#confirmPassword").val();
-                var password = $("#password").val();
-
-                if (confirmPassword !== password) {
-                    $("#invalidconfirmPassword").show();
-                } else {
-                    $("#invalidconfirmPassword").hide();
-                }
-                enableDisableLoginButton();
+            $("#emailid, #username, #password, #confirmPassword").on("input", function () {
+                validateForm();
             });
 
-            function enableDisableLoginButton() {
-                if ($("#emailid").next().is(":hidden") &&
-                    $("#username").next().is(":hidden") &&
-                    $("#password").next().is(":hidden") &&
-                    $("#confirmPassword").next().is(":hidden")) {
+            $("#submit").click(function () {
+                var email = $("#emailid").val();
+                var username = $("#username").val();
+                var password = $("#password").val();
+                var confirmPassword = $("#confirmPassword").val();
+
+                // Validate email
+                if (!isValidEmail(email)) {
+                    $("#invalidemail").show();
+                    return false;
+                }
+
+                // Validate username
+                if (!isValidUsername(username)) {
+                    $("#invalidusername").show();
+                    return false;
+                }
+
+                // Validate password
+                if (!isValidPassword(password)) {
+                    $("#invalidpassword").show();
+                    return false;
+                }
+
+                // Validate confirm password
+                if (confirmPassword !== password) {
+                    $("#invalidconfirmPassword").show();
+                    return false;
+                }
+
+                // All validations passed
+                document.location.href = './calculator.html?userName=' + username;
+                alert("Logged In successfully");
+                return true;
+            });
+
+            function validateForm() {
+                var email = $("#emailid").val();
+                var username = $("#username").val();
+                var password = $("#password").val();
+                var confirmPassword = $("#confirmPassword").val();
+
+                // Hide all error messages
+                $('.error').hide();
+
+                // Validate email
+                if (!isValidEmail(email)) {
+                    $("#invalidemail").show();
+                }
+
+                // Validate username
+                if (!isValidUsername(username)) {
+                    $("#invalidusername").show();
+                }
+
+                // Validate password
+                if (!isValidPassword(password)) {
+                    $("#invalidpassword").show();
+                }
+
+                // Validate confirm password
+                if (confirmPassword !== password) {
+                    $("#invalidconfirmPassword").show();
+                }
+
+                // Enable or disable submit button
+                if (isValidEmail(email) && isValidUsername(username) && isValidPassword(password) &&
+                    confirmPassword === password) {
                     $("#submit").prop("disabled", false);
                 } else {
                     $("#submit").prop("disabled", true);
                 }
             }
+
+            function isValidEmail(email) {
+                var regex = /^[a-zA-Z0-9._-]+@northeastern\.edu$/;
+                return regex.test(email);
+            }
+
+            function isValidUsername(username) {
+                // You can add more specific validation for username if needed
+                return username.length > 5;
+            }
+
+            function isValidPassword(password) {
+                // You can add more specific validation for password if needed
+                return password.length > 8;
+            }
         });
-
-        function IsEmail(emailid) {
-            var regex = /[a-z0-9]+@northeastern.edu/;
-            return regex.test(emailid);
-        }
-
-        function IsPassword(password) {
-            var regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%&*]).{8,}$/;
-            return regex.test(password);
-        }
     </script>
 </body>
 
