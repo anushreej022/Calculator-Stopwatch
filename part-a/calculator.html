@@ -9,12 +9,13 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+
 </head>
 
 <body style="background-color: rgb(91, 89, 89);">
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light " style="color: aquamarine;">
-        <div class="d-flex flex-grow-1">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light " style="color: aquamarine;" >
+        <div class="d-flex flex-grow-1" >
             <a class="navbar-brand mx-3" href="index.html"> Calculator Desktop Application </a>
             <div class="w-100 text-right">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar">
@@ -28,8 +29,10 @@
                 <li class="nav-item">
                     <a href="#" class="nav-link m-2 menu-item text-white nav-active" id="logo">
                         <input type="button" value="" id="name" />
+
                     </a>
                 </li>
+
             </ul>
         </div>
     </nav>
@@ -48,27 +51,27 @@
                                     <form id="form">
                                         <div class="row g-3 align-items-center">
                                             <div class="col-auto">
-                                                <label for="input1" class="col-form-label">Number 1:</label>
+                                                <label for="input1" class="col-form-label">Enter number 1 : </label>
                                             </div>
                                             <div class="col-auto">
                                                 <input type="text" id="input1" class="form-control px-4" required>
-                                                <span class="error-message" id="error-message">Please enter a valid number</span>
                                             </div>
+                                            <p id="error-message" class="error-message"></p>
                                         </div>
 
                                         <div class="row g-3 align-items-center">
                                             <div class="col-auto">
-                                                <label for="input2" class="col-form-label">Number 2:</label>
+                                                <label for="input2" class="col-form-label">Enter number 2 : </label>
                                             </div>
                                             <div class="col-auto">
                                                 <input type="text" id="input2" class="form-control px-4" required>
-                                                <span class="error-message" id="error-message1">Please enter a valid number</span>
                                             </div>
+                                            <p id="error-message1" class="error-message"></p>
                                         </div>
 
                                         <div class="row g-3 align-items-center">
                                             <div class="col-auto">
-                                                <label for="input2" class="col-form-label">Result:</label>
+                                                <label for="input2" class="col-form-label">Result :</label>
                                             </div>
                                             <div class="col-auto mx-5 px-4">
                                                 <input id="result" class="form-control px-4" disabled>
@@ -100,6 +103,7 @@
             </div>
         </div>
     </main>
+
     <script>
         let paramString = document.URL.split('?')[1];
         let queryString = new URLSearchParams(paramString);
@@ -109,70 +113,70 @@
             console.log(document.getElementById('name').value);
         }
 
-        function Operations(operands) {
-            var firstNumber = parseInt($('#input1').val());
-            var secondNumber = parseInt($('#input2').val());
+      
+function Operations(operands) {
+    var firstNumber = $('#input1').val();
+    var secondNumber = $('#input2').val();
 
-            let message = "Please Enter Numbers Only";
+    let message = "Please Enter Numbers Only";
 
-            if (!$.isNumeric(firstNumber)) {
-                $("#error-message").text(message);
-                return false;
-            } else {
-                $("#error-message").text("");
-            }
-            if (!$.isNumeric(secondNumber)) {
-                $("#error-message1").text(message);
-                return false;
-            }
+    if (!/^\d+$/.test(firstNumber)) {
+        $("#error-message").text(message);
+        return false;
+    } else {
+        $("#error-message").text("");
+    }
 
-            if (operands == 'div' && secondNumber == 0) {
-                $("#error-message1").text("Can't divide by 0");
-                return false;
-            } else {
-                $("#error-message1").text("");
-            }
+    if (!/^\d+$/.test(secondNumber)) {
+        $("#error-message1").text(message);
+        return false;
+    } else {
+        $("#error-message1").text("");
+    }
+
+    firstNumber = parseInt(firstNumber);
+    secondNumber = parseInt(secondNumber);
+
+    if (operands == 'div' && secondNumber === 0) {
+        $("#error-message1").text("Can't divide by 0");
+        return false;
+    } else {
+        $("#error-message1").text("");
+    }
 
             var result = 0;
 
             switch (operands) {
+
                 case 'add':
-                    result = ((x, y) => { return x + y; })(firstNumber, secondNumber);
+                    result = ((x, y) => {
+                        return x + y;
+                    })(firstNumber, secondNumber);
                     break;
 
                 case 'sub':
-                    result = ((x, y) => { return x - y; })(firstNumber, secondNumber);
+                    result = ((x, y) => {
+                        return x - y;
+                    })(firstNumber, secondNumber);
                     break;
 
                 case 'mul':
-                    result = ((x, y) => { return x * y; })(firstNumber, secondNumber);
+                    result = ((x, y) => {
+                        return x * y;
+                    })(firstNumber, secondNumber);
                     break;
 
                 case 'div':
-                    result = ((x, y) => { return x / y; })(firstNumber, secondNumber);
+                    result = ((x, y) => {
+                        return x / y;
+                    })(firstNumber, secondNumber);
                     break;
             }
 
             $("#result").val(result);
         }
-
-        // Add blur event listeners for input fields
-        $("#input1, #input2").blur(function () {
-            var input1 = $("#input1").val();
-            var input2 = $("#input2").val();
-
-            if (!$.isNumeric(input1)) {
-                $("#error-message").text("Please enter a valid number");
-            } else {
-                $("#error-message").text("");
-            }
-            if (!$.isNumeric(input2)) {
-                $("#error-message1").text("Please enter a valid number");
-            } else {
-                $("#error-message1").text("");
-            }
-        });
     </script>
+
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"></script>
